@@ -1,0 +1,30 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "ansible-test-ruckus_vszh_wlan_psk",
+            "type": "shell",
+            "command":"ansible-playbook",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "ANSIBLE_LIBRARY": "${workspaceFolder}/ruckus_vszh"
+                }
+            },
+            "linux": {
+                "args": [
+                    "tests/ruckus_vszh_wlan_passphrase_module.yml"
+                ]
+            },
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared"
+            }
+        }
+    ]
+}
