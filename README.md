@@ -5,7 +5,6 @@ Ansible Module for managing Ruckus Virtual Smartzone
 ## TODO
 
 - [ ] Implement Lookup Filter to get domain/zone/wlan with regexp for eval/module usage
-- [ ] Extract vszh_api class to outside, so we can use it for other vszh modules
 
 ## ruckus_vszh_wlan_passphrase
 

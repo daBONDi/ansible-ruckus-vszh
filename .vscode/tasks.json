@@ -10,7 +10,9 @@
             "options": {
                 "cwd": "${workspaceFolder}",
                 "env": {
-                    "ANSIBLE_LIBRARY": "${workspaceFolder}/ruckus_vszh"
+                    "ANSIBLE_LIBRARY": "${workspaceFolder}/library",
+                    "ANSIBLE_LOOKUP_PLUGINS": "${workspaceFolder}/lookup_plugins",
+                    "ANSIBLE_MODULE_UTILS": "${workspaceFolder}/module_utils"
                 }
             },
             "linux": {

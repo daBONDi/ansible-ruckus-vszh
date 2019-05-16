@@ -8,12 +8,28 @@
             "name": "ruckus_vszh_wlan_psk",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/ruckus_vszh/ruckus_vszh_wlan_passphrase.py",
-            "cwd": "${workspaceFolder}/ruckus_vszh",
+            "program": "${workspaceFolder}/library/ruckus_vszh/ruckus_vszh_wlan_passphrase.py",
+            "cwd": "${workspaceFolder}/library/ruckus_vszh",
             "console": "integratedTerminal",
             "args": [
                 "${workspaceFolder}/tests/ruckus_vszh_wlan_passphrase_module_args.json"
-            ]
+            ],
+            "env": {
+                "ANSIBLE_MODULE_UTILS": "${workspaceFolder}/module_utils"
+            }
+        },
+        {
+            "name": "lookup_ruckus_vszh_domain",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/lookup_plugins/ruckus_vszh_domain.py",
+            "cwd": "${workspaceFolder}/lookup_plugins",
+            "console": "integratedTerminal",
+            "env": {
+                "ANSIBLE_LIBRARY": "${workspaceFolder}/library",
+                "ANSIBLE_LOOKUP_PLUGINS": "${workspaceFolder}/lookup_plugins",
+                "ANSIBLE_MODULE_UTILS": "${workspaceFolder}/module_utils"
+            }
         }
     ]
 }
