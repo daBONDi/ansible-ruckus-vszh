@@ -4,14 +4,15 @@ from ansible.module_utils.urls import Request, SSLValidationError
 import json
 import urllib2
 
-
+# Virtual Smartzone API Communication
+# TODO:: Need to be shared outside, so we can develop more functions easier
 class vsz_api:
 
     api_endpoint_url = ''
     __api_user = ''
     __api_password = ''
 
-    __request = None    # Holder for Request Object
+    __request = None
     __ignore_ssl_validation = True
 
     __ansible_module = None
@@ -156,20 +157,20 @@ class vsz_api:
         return True, request_result.msg
 
 def run_module():
+
+    # Setup Module
     module_args = dict(
         vsz_server=dict(type='str', required=True),
         vsz_server_port=dict(type='int', required=False, default=8443),
         vsz_user=dict(type='str', required=True),
         vsz_password=dict(type='str', required=True, no_log=True),
         use_ssl=dict(type='bool', required=False, default=True),
-        ignore_ssl_validation=dict(type='bool', required=False, default=True),
+        ignore_ssl_validation=dict(type='bool', required=False, default=False),
         domain=dict(type='str', required=True),
         zone=dict(type='str', required=True),
         wlan=dict(type='str', required=True),
         passphrase=dict(type='str', required=True, no_log=True),
-
     )
-
     module = AnsibleModule(
         argument_spec=module_args,
         supports_check_mode=True
@@ -221,10 +222,6 @@ def run_module():
         module.fail_json(msg="api get wlan settings error: no encryption settings on api response!")
 
     current_encryption_settings = current_wlan_settings['encryption']
-
-
-
-
     if not current_encryption_settings['passphrase'] == module.params['passphrase']:
         if(not module.check_mode):
             # We realy change here
@@ -233,16 +230,13 @@ def run_module():
             result, data = vsz.set_wlan_encryption(zone_id, wlan_id, new_encryption_settings)
             if not result:
                 module.fail_json(msg="api wlan encryption setting: error on applying new settings " + data)
-    
+
         changed = True
-
-
 
     # Logout
     status, data = vsz.logout()
     if not status:
         module.fail_json(msg="api logout error: " + str(data))
-
 
     result = dict(
         changed = changed,
@@ -253,10 +247,5 @@ def run_module():
 
     module.exit_json(**result)
 
-
-def main():
-    run_module()
-
-
 if __name__ == '__main__':
-    main()
+    run_module()
