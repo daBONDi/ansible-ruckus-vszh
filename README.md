@@ -28,7 +28,7 @@ Query the WSZ for wlans with regex and return it under the object 'wlans'
 
 ```json
 { 
-    wlans: [
+    "wlans": [
         {
             "wlan_id": "<Value>",
             "wlan_name": "<Value>",
@@ -36,8 +36,7 @@ Query the WSZ for wlans with regex and return it under the object 'wlans'
             "zone_name": "<Value>",
             "domain_id": "<Value>",
             "domain_name": "<Value>"
-        },
-        ...
+        }
     ]
 }
 ``` 
