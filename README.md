@@ -1,14 +1,74 @@
 # ansible-ruckus-vszh
 
-Ansible Module for managing Ruckus Virtual Smartzone
+Ansible module for managing Ruckus Virtual Smartzone
 
-## TODO
+**TODO::**
+ - [ ] More Testing
+ - [ ] Awsome ansible module docs
 
-- [ ] Implement Lookup Filter to get domain/zone/wlan with regexp for eval/module usage
+## ruckus_vszh_get_wlan
+
+Query the WSZ for wlans with regex and return it under the object 'wlans'
+
+### Parameters
+
+| Parameter | Description | Required  | Default |
+| --------- | ----------- | --------- | ------- |
+| vsz_server        | FQDN or IP Address of the Ruckus VSZ Server | Yes | |
+| vsz_server_port   | TCP Port | no | 8443 |
+| vsz_user          | API User | yes | | 
+| vsz_password      | Password | yes | | 
+| use_ssl | Use HTTPS for API Access | no | True |
+| ignore_ssl_validation | Ignore SSL Certificate Validateion | no | False |
+| domain | Regex - VSZ Domain Name | no | |
+| zone | Regex - VSZ Zone Name | no | |
+| wlan | Regex - VSZ WLAN Name | no | |
+
+### Response
+
+```json
+{ 
+    wlans: [
+        {
+            "wlan_id": "<Value>",
+            "wlan_name": "<Value>",
+            "zone_id": "<Value>",
+            "zone_name": "<Value>",
+            "domain_id": "<Value>",
+            "domain_name": "<Value>"
+        },
+        ...
+    ]
+}
+``` 
+
+### Example
+
+```yaml
+- ruckus_vszh_get_wlan:
+    vsz_server: 10.0.0.23
+    vsz_server_port: 8443
+    vsz_user: mysecretuser
+    vsz_password: mysecretpassword
+    ignore_ssl_validation: yes
+    
+    # Lets get all wlans 
+    # - for domain "customer1*" 
+    # - with zone "guest*" 
+    # - and wlans with '*guest*'
+    domain: ^customer
+    zone: ^guest
+    wlan: guest
+    register: result
+
+- debug:
+    msg: "{{ item.domain_name }} {{ item.zone_name }} {{ item.wlan_name }}"
+    with_items: result.wlans
+``` 
 
 ## ruckus_vszh_wlan_passphrase
 
-Ensure WLAN Passphrase (PSK) for a specified WLAN
+Ensure wlan passphrase(PSK) for a specified wLAN
 
 ### Parameters
 

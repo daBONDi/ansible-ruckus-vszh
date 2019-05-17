@@ -12,12 +12,39 @@
                 "env": {
                     "ANSIBLE_LIBRARY": "${workspaceFolder}/library",
                     "ANSIBLE_LOOKUP_PLUGINS": "${workspaceFolder}/lookup_plugins",
-                    "ANSIBLE_MODULE_UTILS": "${workspaceFolder}/module_utils"
+                    "ANSIBLE_MODULE_UTILS": "${workspaceFolder}/module_utils",
+                    "ANSIBLE_RETRY_FILES_ENABLED":"0"
                 }
             },
             "linux": {
                 "args": [
                     "tests/ruckus_vszh_wlan_passphrase_module.yml"
+                ]
+            },
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "ansible-test-ruckus_vszh_get_wlan",
+            "type": "shell",
+            "command":"ansible-playbook",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "ANSIBLE_LIBRARY": "${workspaceFolder}/library",
+                    "ANSIBLE_LOOKUP_PLUGINS": "${workspaceFolder}/lookup_plugins",
+                    "ANSIBLE_MODULE_UTILS": "${workspaceFolder}/module_utils",
+                    "ANSIBLE_RETRY_FILES_ENABLED":"0"
+                }
+            },
+            "linux": {
+                "args": [
+                    "tests/ruckus_vszh_get_wlan_module.yml"
                 ]
             },
             "group": "test",

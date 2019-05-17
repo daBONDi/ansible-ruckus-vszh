@@ -1,0 +1,19 @@
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - ruckus_vszh_get_wlan:
+        vsz_server: 10.0.0.23
+        vsz_server_port: 8443
+        vsz_user: admin
+        vsz_password: '#nhab86AWKsHH48pf'
+        ignore_ssl_validation: yes
+        
+        # Lets get all wlans for domain "customer1*"
+        domain: ^customer
+        #zone: ^customer1
+        #wlan: wlan3
+      register: result
+
+    - debug:
+        msg: "{{ item.domain_name }} {{ item.zone_name }} {{ item.wlan_name }}"
+      with_items: "{{ result.wlans }}"
