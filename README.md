@@ -2,9 +2,15 @@
 
 Ansible module for managing Ruckus Virtual Smartzone
 
-**TODO::**
- - [ ] More Testing
- - [ ] Awsome ansible module docs
+## Usage
+
+- Ensure files in module_utils is in your environment module_utils folder
+  - Project Tree Subfolder 'module_utils' configured on ansible.cfg
+  - Environment Variable **ANSIBLE_MODULE_UTILS**
+- Ensure files in library is in your environment library folder
+  - Project Tree Subfolder 'library' configured on ansible.cfg
+  - Environment Variable **ANSIBLE_LIBRARY**
+
 
 ## ruckus_vszh_get_wlan
 

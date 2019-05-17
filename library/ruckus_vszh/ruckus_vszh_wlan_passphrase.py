@@ -1,3 +1,86 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+#
+# @author: David Baumann(me@davidbaumann.at)
+#
+# module_check: supported
+#
+# Copyright: (c) 2019, David Baumann <me@davidbaumann.at>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+ANSIBLE_METADATA = {'metadata_version': '1.0',
+                    'status': ['preview'],
+                    'supported_by': 'community'}
+
+DOCUMENTATION = r'''
+---
+module: 'ruckus_vszh_wlan_passphrase.py'
+short_description: 'Module for setting the passphrase(PSK) for a specific WLAN'
+description:
+    - 'Module for setting the passphrase(PSK) for a specific WLAN'
+author: 'David Baumann (@daBONDi) <me@davidbaumann.at>'
+options:
+    vsz_server:
+        description:
+            - 'IP or FQDN of the Ruckus VSZ-H server.'
+        required: true
+    vsz_server_port:
+        description: 
+            - 'TCP port for the Ruckus VSZ-H server.'
+        required: false
+        default: 8443
+    vsz_user:
+        description: 
+            - 'User for accessing the Ruckus VSZ-H Public API.'
+        required: true
+    vsz_password:
+        description: 
+            - 'Password for accessing the Ruckus VSZ-H Public API.'
+    ignore_ssl_validation:
+        description: 
+            - 'Ignore SSL certificate validation check.'
+        required: false
+        default: false
+    use_ssl:
+        description:
+            - 'User https for accessing the Ruckus VSZ-H Public API.'
+        required: false
+        default: true
+    domain:
+        description:
+            - 'vsz domain'
+        required: true
+    zone:
+        description:
+            - 'zone name'
+        required: true
+    wlan:
+        description:
+            - 'wlan name'
+        required: true
+    passphrase:
+        description:
+            - 'Password for the WLAN (PSK)'
+        requried: true
+notes:
+    - 'Tested with VSZ Version: 3.6.2.0.222'
+'''
+
+EXAMPLES = r'''
+- ruckus_vszh_wlan_passphrase:
+    vsz_server: 10.0.0.23
+    vsz_user: myadminuser
+    vsz_password: mysecretpassword
+    ignore_ssl_validation: yes
+    domain: customer1
+    zone: customer1-zone1
+    wlan: customer1-wlan2
+    passphrase: start3456#
+'''
+
+RETURN=r'''
+'''
+
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.urls import Request, SSLValidationError
 
@@ -97,10 +180,7 @@ def run_module():
         module.fail_json(msg="api logout error: " + str(data))
 
     result = dict(
-        changed = changed,
-        domain_id = domain_id,
-        zone_id = zone_id,
-        wlan_id = wlan_id
+        changed = changed
     )
 
     module.exit_json(**result)

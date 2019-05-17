@@ -1,0 +1,35 @@
+- hosts: localhost
+  gather_facts: false
+  vars:
+    wlan_password: 'changed1234#'
+    vsz:
+      server: 10.0.0.23
+      user: admin
+      password: '#nhab86AWKsHH48pf'
+      ignore_ssl_validation: yes
+  tasks:
+    - name: "Gather VSZ wlans"
+      ruckus_vszh_get_wlan:
+        vsz_server: "{{ vsz.server }}"
+        vsz_user: "{{ vsz.user }}"
+        vsz_password: "{{ vsz.password}}"
+        ignore_ssl_validation: "{{ vsz.ignore_ssl_validation }}"
+        
+        # Lets get all wlans for domain "customer1*" with wlan name '*wlan*'
+        domain: ^customer1
+        wlan: wlan
+      register: vsz_wlan_query
+    
+    - name: "Apply VSZ WLAN PSK"
+      ruckus_vszh_wlan_passphrase:
+        vsz_server: "{{ vsz.server }}"
+        vsz_user: "{{ vsz.user }}"
+        vsz_password: "{{ vsz.password }}"
+        ignore_ssl_validation: "{{ vsz.ignore_ssl_validation }}"
+        domain: "{{ item.domain_name }}"
+        zone: "{{ item.zone_name }}"
+        wlan: "{{ item.wlan_name }}"
+        passphrase: "{{ wlan_password }}"
+      with_items: "{{ vsz_wlan_query.wlans }}"
+
+      

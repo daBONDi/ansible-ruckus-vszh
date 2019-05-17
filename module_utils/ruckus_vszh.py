@@ -1,3 +1,18 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+""" Ruckus Virtual SmartZone High Scale API
+
+Provide Ansible module_utils helper class for communication with Ruckus Virtual SmartZone - High Scale API.
+
+Tested with VSZ Version: 3.6.2.0.222
+
+@author: David Baumann (me@davidbaumann.at)
+
+Copyright: (c) 2019, David Baumann <me@davidbaumann.at>
+GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+"""
+
 from ansible.module_utils.urls import Request, SSLValidationError
 
 import json
