@@ -38,15 +38,40 @@ class vsz_api:
         else:
             self.api_endpoint_url = self.api_endpoint_url + 'http://'
 
-        self.api_endpoint_url = self.api_endpoint_url + \
-            server + ':' + str(server_port) + "/wsg/api/public"
-
         self.__api_password = password
         self.__api_user = user
 
         self.__ignore_ssl_validation = ignore_ssl_validation
 
         self.__request = Request()
+
+        api_fetch_result, api_version_string = self.get_latest_api_version
+        if not api_fetch_result:
+            # TODO:: What we do if we got an error on the API Request
+            # should we throw exception, but then it will not be pretty
+        else:
+            self.api_endpoint_url = self.api_endpoint_url + \
+                server + ':' + str(server_port) + "/wsg/api/public/" + api_version_string
+
+    def get_latest_api_version(self):
+        
+        apiInfo_result, apiInfo_response = self.__api_call('GET', '/wsg/api/public/apiInfo')
+        if apiInfo_result:
+            current_version_string = ""
+            current_version_number = 0
+            for version in apiInfo_response.apiSupportVersion:
+                if current_version_number == 0:
+                    current_version_string = version
+                    current_version_number = version.split('_')[0].replace('v','')
+                else:
+                    version_number = version.split('_')[0].replace('v','')
+                    if version_number > current_version_number:
+                        current_version_string = version
+                        current_version_number = version_number
+            return True, current_version_string
+        else:
+            # Error on apiInfo request
+            return False, apiInfo_response       
 
     def get_domain_id(self, domain_name):
 
@@ -64,7 +89,7 @@ class vsz_api:
 
     def get_domains(self):
         return self.__return_api_list(
-            *(self.__api_call('GET','/v6_0/domains?listSize=9999&recusively=True'))
+            *(self.__api_call('GET','/domains?listSize=9999&recusively=True'))
         )
 
     def get_rkszone_id(self, zone_name, domain_id):
@@ -81,7 +106,7 @@ class vsz_api:
 
     def get_rkszones(self, domain_id):
         return self.__return_api_list(
-            *(self.__api_call('GET','/v6_0/rkszones?listSize=9999&domainId=' + domain_id))
+            *(self.__api_call('GET','/rkszones?listSize=9999&domainId=' + domain_id))
         )
 
     def set_wlan_encryption(self, zone_id, wlan_id, wlan_encryption_settings):
@@ -89,11 +114,11 @@ class vsz_api:
             "method" : wlan_encryption_settings['method'],
             "passphrase" : wlan_encryption_settings['passphrase']
         }
-        return self.__api_call('PATCH','/v4_0/rkszones/' + zone_id + '/wlans/' + wlan_id  + '/encryption', data=json.dumps(data))
+        return self.__api_call('PATCH','/rkszones/' + zone_id + '/wlans/' + wlan_id  + '/encryption', data=json.dumps(data))
         
 
     def get_wlan_settings(self, zone_id, wlan_id):
-        result, data = self.__api_call('GET','/v4_0/rkszones/' + zone_id + '/wlans/' + wlan_id)
+        result, data = self.__api_call('GET','/rkszones/' + zone_id + '/wlans/' + wlan_id)
         return result, data
 
     def get_wlan_id(self, zone_id, wlan_name):
@@ -111,7 +136,7 @@ class vsz_api:
 
     def get_wlans(self, zone_id):
         return self.__return_api_list(
-            *(self.__api_call('GET','/v6_0/rkszones/' + zone_id + '/wlans?listSize=99999'))
+            *(self.__api_call('GET','/rkszones/' + zone_id + '/wlans?listSize=99999'))
         )
 
 
@@ -123,13 +148,13 @@ class vsz_api:
         )
 
         return self.__api_call(
-            'POST','/v6_0/session', 
+            'POST','/session', 
             data=json.dumps(data),
         )
 
     def logout(self):
         return self.__api_call(
-                'DELETE','/v6_0/session'
+                'DELETE','/session'
             )
     
 
